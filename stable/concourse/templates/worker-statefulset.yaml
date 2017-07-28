@@ -21,19 +21,21 @@ spec:
               "preferredDuringSchedulingIgnoredDuringExecution": [
                 {
                   "weight": 100,
-                  "labelSelector": {
-                    "matchExpressions": [{
-                      "key": "app",
-                      "operator": "In",
-                      "values": ["{{ template "worker.fullname" . }}"]
-                    }]
-                  },
-                  "topologyKey": "kubernetes.io/hostname"
+                  "podAffinityTerm": {
+                    "labelSelector": {
+                      "matchExpressions": [{
+                        "key": "app",
+                        "operator": "In",
+                        "values": ["{{ template "worker.fullname" . }}"]
+                      }]
+                    },
+                    "topologyKey": "kubernetes.io/hostname"
+                  }
                 }
               ]
             }
           }
-    spec:
+spec:
       terminationGracePeriodSeconds: 60
       containers:
         - name: {{ template "worker.fullname" . }}
